@@ -2,12 +2,16 @@
 gsap.registerPlugin(ScrollTrigger);
 
 document.addEventListener('DOMContentLoaded', () => {
+    initCursor();
     initNavbar();
     initHero();
     initSequence();
+    initMarquee();
     initCounters();
     initReveals();
+    initHorizontalScroll();
     initLightbox();
+    initMaterials();
 });
 
 /* --- Navbar Logic --- */
@@ -246,3 +250,106 @@ mobileMenuBtn.addEventListener('click', () => {
     navLinks.classList.toggle('active');
     mobileMenuBtn.classList.toggle('open');
 });
+
+/* --- Materials Interactive Showcase --- */
+function initMaterials() {
+    const items = document.querySelectorAll('.material-item');
+    const bg = document.getElementById('materials-bg');
+
+    if(!bg) return;
+
+    items.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+            // Remove active class from all
+            items.forEach(el => el.classList.remove('active'));
+            // Add active class to hovered
+            item.classList.add('active');
+            
+            // Change bg
+            const newBg = item.getAttribute('data-bg');
+            bg.style.backgroundImage = `url('${newBg}')`;
+            
+            // Slight zoom effect on background change
+            gsap.fromTo(bg, { scale: 1.05 }, { scale: 1, duration: 1.5, ease: "power2.out" });
+        });
+    });
+}
+
+/* --- Custom Cursor --- */
+function initCursor() {
+    const cursor = document.querySelector('.custom-cursor');
+    if(!cursor) return;
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let cursorX = mouseX;
+    let cursorY = mouseY;
+    let speed = 0.2; // Adjust for smoother/faster tracking
+
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    const animateCursor = () => {
+        let distX = mouseX - cursorX;
+        let distY = mouseY - cursorY;
+        
+        cursorX += distX * speed;
+        cursorY += distY * speed;
+        
+        cursor.style.left = cursorX + 'px';
+        cursor.style.top = cursorY + 'px';
+        
+        requestAnimationFrame(animateCursor);
+    };
+    animateCursor();
+
+    const hoverElements = document.querySelectorAll('a, button, .material-item, .lightbox-trigger');
+    hoverElements.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+    });
+}
+
+/* --- Infinite Marquee --- */
+function initMarquee() {
+    const marqueeContainer = document.querySelector('.marquee-text');
+    if(!marqueeContainer) return;
+    
+    // Set up GSAP continuous animation
+    gsap.to(marqueeContainer, {
+        xPercent: -50,
+        ease: "none",
+        duration: 30, // Adjust speed
+        repeat: -1
+    });
+}
+
+/* --- Horizontal Scroll Gallery --- */
+function initHorizontalScroll() {
+    const section = document.getElementById('horizontal-projects');
+    const wrapper = document.querySelector('.horizontal-wrapper');
+    if(!section || !wrapper) return;
+
+    function getScrollAmount() {
+        let wrapperWidth = wrapper.scrollWidth;
+        let windowWidth = window.innerWidth;
+        return -(wrapperWidth - windowWidth + 80); // 80 for padding
+    }
+
+    const tween = gsap.to(wrapper, {
+        x: getScrollAmount,
+        ease: "none"
+    });
+
+    ScrollTrigger.create({
+        trigger: section,
+        start: "top 10%",
+        end: () => `+=${getScrollAmount() * -1}`,
+        pin: true,
+        animation: tween,
+        scrub: 1,
+        invalidateOnRefresh: true
+    });
+}
