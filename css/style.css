@@ -313,6 +313,8 @@ ul {
 
 .scene-btn {
     position: relative;
+    display: inline-block;
+    white-space: nowrap;
     overflow: hidden;
     padding: 15px 30px;
     background: linear-gradient(45deg, #111111, #555555, #111111);
