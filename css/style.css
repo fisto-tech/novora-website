@@ -70,7 +70,7 @@ ul {
 }
 
 .preloader-logo {
-    height: 40px;
+    height: 120px;
     margin-bottom: 30px;
     opacity: 0;
     animation: fadeIn 1s forwards;
@@ -545,6 +545,13 @@ ul {
     gap: 80px;
     align-items: center;
     text-align: left;
+}
+
+@media screen and (max-width: 480px) {
+    .cta-grid {
+        grid-template-columns: repeat(1, 1fr);
+        gap: 25px;
+    }
 }
 
 .cta-image img {
