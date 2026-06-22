@@ -264,9 +264,6 @@ ul {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .overlay-text {
@@ -279,8 +276,46 @@ ul {
     transform: translateY(50px);
     text-align: center;
     width: fit-content;
-    padding: 0 20px;
+    padding: 15px 20px;
     background-color: rgba(255, 255, 255, 0.508);
+}
+
+.overlay-text.pos-center {
+    top: 0; bottom: 0; left: 0; right: 0;
+    margin: auto;
+    height: fit-content;
+}
+.overlay-text.pos-top-left {
+    top: 25%;
+    left: 10%;
+    text-align: left;
+}
+.overlay-text.pos-top-right {
+    top: 25%;
+    right: 10%;
+    text-align: right;
+}
+.overlay-text.pos-bottom-left {
+    bottom: 25%;
+    left: 10%;
+    text-align: left;
+}
+.overlay-text.pos-bottom-right {
+    bottom: 25%;
+    right: 10%;
+    text-align: right;
+}
+.overlay-text.pos-center-left {
+    top: 0; bottom: 0; left: 10%;
+    margin: auto 0;
+    height: fit-content;
+    text-align: left;
+}
+.overlay-text.pos-center-right {
+    top: 0; bottom: 0; right: 10%;
+    margin: auto 0;
+    height: fit-content;
+    text-align: right;
 }
 
 .scene-actions-container {
