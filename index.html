@@ -14,7 +14,7 @@
     <link rel="icon" href="./logo-final.webp" type="image/webp">
     
     <!-- Styles -->
-    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/style.css?v=4">
 </head>
 <body>
     <!-- Custom Cursor -->
@@ -200,24 +200,84 @@
                 </div>
             </div>
 
+            <div class="gallery-header reveal">
+                <span class="gallery-subtitle">Selected Exhibition</span>
+                <h2 class="gallery-title">SPATIAL GALLERY</h2>
+                <p class="gallery-desc">A curated showcase of our latest minimal interior and structural design studies.</p>
+            </div>
+
             <div class="gallery-grid">
-                <div class="gallery-item reveal">
-                    <img src="frames/00050.webp" alt="Villa Exterior" class="lightbox-trigger">
+                <div class="gallery-item reveal span-large" data-title="Contemporary Minimal Lounge" data-category="Living Environment" data-index="1">
+                    <div class="gallery-img-wrapper">
+                        <img src="assets/img/gallery/Generate_inner_room_interior_images_202606271243.webp" alt="Contemporary Minimal Lounge" class="lightbox-trigger">
+                    </div>
+                    <div class="gallery-info">
+                        <span class="gallery-item-category">Living Environment</span>
+                        <h4 class="gallery-item-title">Contemporary Minimal Lounge</h4>
+                    </div>
                 </div>
-                <div class="gallery-item reveal">
-                    <img src="frames/00100.webp" alt="Interior Living" class="lightbox-trigger">
+                <div class="gallery-item reveal span-portrait" data-title="Brutalist Living Concept" data-category="Residential Spatial" data-index="2">
+                    <div class="gallery-img-wrapper">
+                        <img src="assets/img/gallery/Generate_inner_room_interior_images_202606271243_2.webp" alt="Brutalist Living Concept" class="lightbox-trigger">
+                    </div>
+                    <div class="gallery-info">
+                        <span class="gallery-item-category">Residential Spatial</span>
+                        <h4 class="gallery-item-title">Brutalist Living Concept</h4>
+                    </div>
                 </div>
-                <div class="gallery-item reveal">
-                    <img src="frames/00200.webp" alt="Modern Kitchen" class="lightbox-trigger">
+                <div class="gallery-item reveal" data-title="Monochromatic Dining Hall" data-category="Interior Design" data-index="3">
+                    <div class="gallery-img-wrapper">
+                        <img src="assets/img/gallery/Generate_inner_room_interior_images_202606271243_3.webp" alt="Monochromatic Dining Hall" class="lightbox-trigger">
+                    </div>
+                    <div class="gallery-info">
+                        <span class="gallery-item-category">Interior Design</span>
+                        <h4 class="gallery-item-title">Monochromatic Dining Hall</h4>
+                    </div>
                 </div>
-                <div class="gallery-item reveal">
-                    <img src="frames/00300.webp" alt="Minimal Staircase" class="lightbox-trigger">
+                <div class="gallery-item reveal" data-title="Symmetrical Gallery Passage" data-category="Architectural Space" data-index="4">
+                    <div class="gallery-img-wrapper">
+                        <img src="assets/img/gallery/Generate_inner_room_interior_images_202606271244.webp" alt="Symmetrical Gallery Passage" class="lightbox-trigger">
+                    </div>
+                    <div class="gallery-info">
+                        <span class="gallery-item-category">Architectural Space</span>
+                        <h4 class="gallery-item-title">Symmetrical Gallery Passage</h4>
+                    </div>
                 </div>
-                <div class="gallery-item reveal">
-                    <img src="frames/00080.webp" alt="Open Concept Area" class="lightbox-trigger">
+                <div class="gallery-item reveal" data-title="Warm Wood Architectural Detail" data-category="Material Study" data-index="5">
+                    <div class="gallery-img-wrapper">
+                        <img src="assets/img/gallery/Generate_more_images_202606271243.webp" alt="Warm Wood Architectural Detail" class="lightbox-trigger">
+                    </div>
+                    <div class="gallery-info">
+                        <span class="gallery-item-category">Material Study</span>
+                        <h4 class="gallery-item-title">Warm Wood Architectural Detail</h4>
+                    </div>
                 </div>
-                <div class="gallery-item reveal">
-                    <img src="frames/00180.webp" alt="Luxurious Bathroom" class="lightbox-trigger">
+                <div class="gallery-item reveal span-portrait" data-title="Minimalist Bedroom Sanctuary" data-category="Residential Spatial" data-index="6">
+                    <div class="gallery-img-wrapper">
+                        <img src="assets/img/gallery/Generate_more_images_202606271243_2.webp" alt="Minimalist Bedroom Sanctuary" class="lightbox-trigger">
+                    </div>
+                    <div class="gallery-info">
+                        <span class="gallery-item-category">Residential Spatial</span>
+                        <h4 class="gallery-item-title">Minimalist Bedroom Sanctuary</h4>
+                    </div>
+                </div>
+                <div class="gallery-item reveal span-wide" data-title="Light & Shadow Atrium" data-category="Atrium Design" data-index="7">
+                    <div class="gallery-img-wrapper">
+                        <img src="assets/img/gallery/Generate_more_images_202606271244.webp" alt="Light & Shadow Atrium" class="lightbox-trigger">
+                    </div>
+                    <div class="gallery-info">
+                        <span class="gallery-item-category">Atrium Design</span>
+                        <h4 class="gallery-item-title">Light & Shadow Atrium</h4>
+                    </div>
+                </div>
+                <div class="gallery-item reveal" data-title="Raw Stone Vanity Area" data-category="Bathhouse Study" data-index="8">
+                    <div class="gallery-img-wrapper">
+                        <img src="assets/img/gallery/Generate_more_images_202606271244_2.webp" alt="Raw Stone Vanity Area" class="lightbox-trigger">
+                    </div>
+                    <div class="gallery-info">
+                        <span class="gallery-item-category">Bathhouse Study</span>
+                        <h4 class="gallery-item-title">Raw Stone Vanity Area</h4>
+                    </div>
                 </div>
             </div>
         </div>
@@ -288,13 +348,27 @@
 
     <!-- Lightbox Modal -->
     <div id="lightbox" class="lightbox">
-        <span class="lightbox-close">&times;</span>
-        <img class="lightbox-content" id="lightbox-img">
+        <button class="lightbox-close" aria-label="Close Lightbox">&times;</button>
+        <button class="lightbox-btn lightbox-prev" aria-label="Previous Image">&larr;</button>
+        <button class="lightbox-btn lightbox-next" aria-label="Next Image">&rarr;</button>
+        
+        <div class="lightbox-header">
+            <span class="lightbox-counter">01 / 08</span>
+        </div>
+        
+        <div class="lightbox-content-wrapper">
+            <img class="lightbox-content" id="lightbox-img" src="" alt="">
+        </div>
+        
+        <div class="lightbox-footer">
+            <span class="lightbox-category">Living Environment</span>
+            <h3 class="lightbox-title">Contemporary Lounge</h3>
+        </div>
     </div>
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="js/app.js?v=3"></script>
+    <script src="js/app.js?v=4"></script>
 </body>
 </html>

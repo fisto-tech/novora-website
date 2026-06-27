@@ -216,30 +216,137 @@ function initReveals() {
 function initLightbox() {
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
-    const triggers = document.querySelectorAll('.lightbox-trigger');
     const closeBtn = document.querySelector('.lightbox-close');
-
-    triggers.forEach(trigger => {
-        trigger.addEventListener('click', () => {
-            lightboxImg.src = trigger.src;
-            lightbox.style.display = 'flex';
+    const prevBtn = document.querySelector('.lightbox-prev');
+    const nextBtn = document.querySelector('.lightbox-next');
+    
+    const counter = document.querySelector('.lightbox-counter');
+    const category = document.querySelector('.lightbox-category');
+    const title = document.querySelector('.lightbox-title');
+    
+    // Gather all gallery items
+    const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
+    if (galleryItems.length === 0) return;
+    
+    let currentIndex = 0;
+    
+    // Open Lightbox
+    galleryItems.forEach((item, index) => {
+        // Trigger on item click
+        item.addEventListener('click', (e) => {
+            currentIndex = index;
+            showImage(currentIndex);
+            
+            // GSAP opening animation
+            lightbox.classList.add('active');
             document.body.style.overflow = 'hidden';
+            
+            gsap.fromTo(lightbox, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" });
+            gsap.fromTo(lightboxImg, { scale: 0.92, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, delay: 0.1, ease: "power3.out" });
+            gsap.fromTo('.lightbox-header, .lightbox-footer, .lightbox-btn, .lightbox-close', 
+                { y: 20, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.6, delay: 0.2, stagger: 0.05, ease: "power2.out" }
+            );
         });
     });
-
-    const closeLightbox = () => {
-        lightbox.style.display = 'none';
-        document.body.style.overflow = 'auto';
+    
+    // Update image and text content with animation
+    function showImage(index) {
+        const item = galleryItems[index];
+        if (!item) return;
+        
+        const img = item.querySelector('img');
+        const itemTitle = item.getAttribute('data-title') || img.alt || '';
+        const itemCategory = item.getAttribute('data-category') || '';
+        
+        // Before updating the image, perform a quick fade transition
+        gsap.to(lightboxImg, {
+            opacity: 0,
+            scale: 0.98,
+            duration: 0.2,
+            ease: "power2.in",
+            onComplete: () => {
+                lightboxImg.src = img.src;
+                lightboxImg.alt = img.alt;
+                
+                // Update text
+                if (counter) counter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(galleryItems.length).padStart(2, '0')}`;
+                if (category) category.textContent = itemCategory;
+                if (title) title.textContent = itemTitle;
+                
+                // Fade in new image
+                gsap.to(lightboxImg, {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.35,
+                    ease: "power2.out"
+                });
+            }
+        });
+    }
+    
+    // Next Image
+    const nextImage = () => {
+        currentIndex = (currentIndex + 1) % galleryItems.length;
+        showImage(currentIndex);
     };
-
-    closeBtn.addEventListener('click', closeLightbox);
+    
+    // Prev Image
+    const prevImage = () => {
+        currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
+        showImage(currentIndex);
+    };
+    
+    // Close Lightbox
+    const closeLightbox = () => {
+        gsap.to(lightbox, {
+            opacity: 0,
+            duration: 0.4,
+            ease: "power2.out",
+            onComplete: () => {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    };
+    
+    // Event Listeners
+    if (nextBtn) nextBtn.addEventListener('click', (e) => { e.stopPropagation(); nextImage(); });
+    if (prevBtn) prevBtn.addEventListener('click', (e) => { e.stopPropagation(); prevImage(); });
+    if (closeBtn) closeBtn.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
+    
+    // Close on clicking backdrop
     lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) closeLightbox();
+        if (e.target === lightbox || e.target.classList.contains('lightbox-content-wrapper')) {
+            closeLightbox();
+        }
     });
-
+    
+    // Keyboard navigation
     document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        if (e.key === 'ArrowRight') nextImage();
+        if (e.key === 'ArrowLeft') prevImage();
         if (e.key === 'Escape') closeLightbox();
     });
+    
+    // Touch gestures for mobile swipe
+    let touchstartX = 0;
+    let touchendX = 0;
+    
+    const handleGesture = () => {
+        if (touchendX < touchstartX - 50) nextImage(); // Swipe left -> Next
+        if (touchendX > touchstartX + 50) prevImage(); // Swipe right -> Prev
+    };
+    
+    lightbox.addEventListener('touchstart', e => {
+        touchstartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    lightbox.addEventListener('touchend', e => {
+        touchendX = e.changedTouches[0].screenX;
+        handleGesture();
+    }, { passive: true });
 }
 
 /* --- Mobile Menu --- */
@@ -305,10 +412,18 @@ function initCursor() {
     };
     animateCursor();
 
-    const hoverElements = document.querySelectorAll('a, button, .material-item, .lightbox-trigger');
+    // Standard hover items (nav links, buttons, materials)
+    const hoverElements = document.querySelectorAll('a, button, .material-item');
     hoverElements.forEach(el => {
         el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
         el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+    });
+
+    // Gallery specific hover cursor (expand VIEW circle)
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    galleryItems.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('gallery-hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('gallery-hover'));
     });
 }
 
