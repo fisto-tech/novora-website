@@ -1,7 +1,10 @@
 // Registration of GSAP Plugins
 gsap.registerPlugin(ScrollTrigger);
 
+let lenisInstance;
+
 document.addEventListener('DOMContentLoaded', () => {
+    initSmoothScroll();
     initCursor();
     initNavbar();
     initHero();
@@ -13,6 +16,59 @@ document.addEventListener('DOMContentLoaded', () => {
     initLightbox();
     initMaterials();
 });
+
+/* --- Smooth Scroll Engine (Lenis) --- */
+function initSmoothScroll() {
+    lenisInstance = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        syncTouch: false, // Maintain native touch scroll behavior on mobile/tablet
+        touchInertiaMultiplier: 2,
+    });
+
+    // Update ScrollTrigger on Lenis scroll
+    lenisInstance.on('scroll', ScrollTrigger.update);
+
+    // Feed Lenis raf to GSAP ticker
+    gsap.ticker.add((time) => {
+        lenisInstance.raf(time * 1000);
+    });
+
+    // Disable lag smoothing in GSAP to prevent synchronization jitter
+    gsap.ticker.lagSmoothing(0);
+
+    // Smooth navigation anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            // Close mobile menu if active
+            const navLinks = document.querySelector('.nav-links');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            if (navLinks && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                if (mobileMenuBtn) mobileMenuBtn.classList.remove('open');
+                if (lenisInstance) lenisInstance.start();
+            }
+
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') {
+                e.preventDefault();
+                lenisInstance.scrollTo(0);
+                return;
+            }
+            const targetEl = document.querySelector(targetId);
+            if (targetEl) {
+                e.preventDefault();
+                lenisInstance.scrollTo(targetEl, {
+                    offset: 0,
+                    duration: 1.2
+                });
+            }
+        });
+    });
+}
 
 /* --- Navbar Logic --- */
 function initNavbar() {
@@ -354,8 +410,17 @@ const mobileMenuBtn = document.getElementById('mobile-menu-btn');
 const navLinks = document.querySelector('.nav-links');
 
 mobileMenuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
+    const isActive = navLinks.classList.toggle('active');
     mobileMenuBtn.classList.toggle('open');
+    
+    // Toggle scroll ability when mobile overlay is active
+    if (lenisInstance) {
+        if (isActive) {
+            lenisInstance.stop();
+        } else {
+            lenisInstance.start();
+        }
+    }
 });
 
 /* --- Materials Interactive Showcase --- */
